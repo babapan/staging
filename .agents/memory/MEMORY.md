@@ -1,0 +1,1 @@
+- [Party Room Join Banner Bug](party-join-banner.md) — party fast-path in gateway.ts was missing join MESSAGE broadcast

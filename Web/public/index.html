@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KyuLive — Live Party, Chat & Komunitas</title>
+  <meta name="description" content="KyuLive adalah platform sosial live streaming untuk chat, party room, gift, dan komunitas aktif. Download aplikasi Android sekarang." />
+  <meta property="og:title" content="KyuLive — Live Party, Chat & Komunitas" />
+  <meta property="og:description" content="Platform sosial live streaming dengan party room, chat, gift, dan komunitas aktif." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://web.chatmeapp.my.id" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --pink:      #FF5FA0;
+      --pink-2:    #FF85B8;
+      --pink-deep: #F0317A;
+      --yellow:    #FFD166;
+      --yellow-2:  #FFE599;
+      --peach:     #FFAA80;
+      --bg:        #FFF5F9;
+      --bg-2:      #FFF0F5;
+      --white:     #ffffff;
+      --text:      #2D1A3E;
+      --muted:     #9B7090;
+      --card:      rgba(255,255,255,0.85);
+      --line:      rgba(255,111,176,0.18);
+      --shadow:    0 20px 60px rgba(255,95,160,0.18);
+      --shadow-y:  0 20px 60px rgba(255,209,102,0.22);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      font-family: 'Nunito', 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ── Deco blobs ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 10% 5%, rgba(255,95,160,0.13), transparent),
+        radial-gradient(ellipse 50% 40% at 90% 10%, rgba(255,209,102,0.18), transparent),
+        radial-gradient(ellipse 40% 35% at 50% 95%, rgba(255,133,184,0.12), transparent);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; position: relative; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(20px) saturate(1.5);
+      background: rgba(255,245,249,0.88);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner { height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-weight: 900; font-size: 22px; letter-spacing: -0.04em;
+    }
+    .brand-logo {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--pink), var(--yellow));
+      display: grid; place-items: center;
+      box-shadow: 0 6px 18px rgba(255,95,160,0.38);
+      font-size: 18px;
+    }
+    .brand-kyu { color: var(--text); }
+    .brand-live { color: var(--pink); }
+    .nav-links { display: flex; align-items: center; gap: 28px; color: var(--muted); font-size: 14px; font-weight: 700; }
+    .nav-links a:hover { color: var(--pink); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+      color: #fff; font-weight: 800; font-size: 14px;
+      padding: 10px 22px; border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(255,95,160,0.38);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(255,95,160,0.44); }
+
+    /* ── HERO ── */
+    .hero { padding: 90px 0 74px; position: relative; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, rgba(255,95,160,0.1), rgba(255,209,102,0.12));
+      border: 1px solid rgba(255,95,160,0.22);
+      border-radius: 999px; padding: 8px 16px;
+      font-size: 13px; font-weight: 800; color: var(--pink);
+      margin-bottom: 22px;
+    }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #FF3B70;
+      box-shadow: 0 0 0 4px rgba(255,59,112,0.2);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+    h1 {
+      font-size: clamp(42px, 7vw, 80px);
+      line-height: .96; letter-spacing: -0.06em; font-weight: 900;
+      margin-bottom: 22px;
+    }
+    h1 .line1 { display: block; color: var(--text); }
+    h1 .line2 {
+      display: block;
+      background: linear-gradient(90deg, var(--pink) 0%, var(--yellow) 60%, var(--peach) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .lead { color: var(--muted); font-size: clamp(16px, 2vw, 19px); max-width: 520px; margin-bottom: 36px; font-weight: 600; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 24px; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+      color: #fff; font-weight: 800; font-size: 15px;
+      padding: 14px 26px; border-radius: 999px;
+      box-shadow: 0 12px 32px rgba(255,95,160,0.4);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 44px rgba(255,95,160,0.48); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: rgba(255,95,160,0.08); border: 1.5px solid rgba(255,95,160,0.22);
+      color: var(--pink); font-weight: 800; font-size: 15px;
+      padding: 14px 26px; border-radius: 999px;
+      transition: background .2s, border-color .2s;
+    }
+    .btn-ghost:hover { background: rgba(255,95,160,0.14); border-color: rgba(255,95,160,0.4); }
+    .hero-version { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .hero-version span { color: var(--pink); font-weight: 800; }
+
+    /* ── PHONE MOCKUP ── */
+    .phone-scene { position: relative; min-height: 560px; display: grid; place-items: center; }
+    .halo-pink {
+      position: absolute; width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,95,160,0.22), transparent 68%);
+      filter: blur(8px);
+    }
+    .halo-yellow {
+      position: absolute; width: 260px; height: 260px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,209,102,0.28), transparent 68%);
+      filter: blur(8px); transform: translate(80px, 60px);
+    }
+    .phone {
+      position: relative; width: 278px; min-height: 528px;
+      border-radius: 44px; padding: 12px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.95), rgba(255,245,249,0.85));
+      border: 1.5px solid rgba(255,95,160,0.2);
+      box-shadow: 0 32px 80px rgba(255,95,160,0.22), 0 12px 28px rgba(255,209,102,0.14);
+      transform: rotate(-2deg);
+    }
+    .screen {
+      overflow: hidden; min-height: 500px; border-radius: 34px;
+      background: linear-gradient(180deg, #FFF0F7 0%, #FFF8E8 100%);
+      border: 1px solid rgba(255,95,160,0.12);
+    }
+    .screen-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; background: rgba(255,255,255,0.7);
+    }
+    .screen-brand { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 900; color: var(--text); }
+    .screen-logo {
+      width: 26px; height: 26px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--pink), var(--yellow));
+      display: grid; place-items: center; font-size: 11px; color: white; font-weight: 900;
+    }
+    .live-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+      color: white; font-size: 10px; font-weight: 800;
+      padding: 3px 9px; border-radius: 999px;
+    }
+    .chat-feed { padding: 14px 12px; display: grid; gap: 10px; }
+    .bubble {
+      padding: 10px 13px; border-radius: 18px;
+      font-size: 12px; color: var(--text); max-width: 80%;
+      background: white; border: 1px solid rgba(255,95,160,0.12);
+      box-shadow: 0 2px 8px rgba(255,95,160,0.07);
+    }
+    .bubble.me {
+      justify-self: end;
+      background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+      color: white; border: none;
+    }
+    .party-card {
+      margin: 6px 12px 0; border-radius: 20px; padding: 14px;
+      background: linear-gradient(135deg, rgba(255,95,160,0.14), rgba(255,209,102,0.14));
+      border: 1px solid rgba(255,95,160,0.16);
+    }
+    .party-card h3 { font-size: 13px; font-weight: 800; margin-bottom: 7px; color: var(--text); }
+    .party-row { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); font-weight: 600; }
+    .party-row strong { color: var(--pink); font-weight: 800; }
+    .floating-card {
+      position: absolute; right: -14px; bottom: 100px;
+      width: 158px; padding: 14px; border-radius: 20px;
+      background: white; border: 1px solid rgba(255,95,160,0.16);
+      box-shadow: 0 16px 44px rgba(255,95,160,0.16);
+      backdrop-filter: blur(16px);
+    }
+    .floating-card .fc-icon { font-size: 22px; margin-bottom: 6px; }
+    .floating-card b { display: block; font-size: 12px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .floating-card small { color: var(--muted); font-size: 11px; font-weight: 600; }
+    .floating-card-2 {
+      position: absolute; left: -18px; top: 80px;
+      width: 138px; padding: 12px; border-radius: 18px;
+      background: linear-gradient(135deg, var(--yellow), var(--peach));
+      box-shadow: 0 12px 32px rgba(255,209,102,0.32);
+    }
+    .floating-card-2 b { font-size: 18px; font-weight: 900; color: var(--text); display: block; }
+    .floating-card-2 small { font-size: 11px; color: #6B4800; font-weight: 700; }
+
+    /* ── DECO SPARKLES ── */
+    .sparkle {
+      position: absolute; pointer-events: none;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-12px) rotate(15deg)} }
+    .sp1 { top: 60px; left: -30px; font-size: 28px; animation-delay: 0s; }
+    .sp2 { top: 20px; right: 40px; font-size: 20px; animation-delay: .8s; }
+    .sp3 { bottom: 80px; left: 20px; font-size: 24px; animation-delay: 1.4s; }
+    .sp4 { bottom: 40px; right: -10px; font-size: 18px; animation-delay: .4s; }
+
+    /* ── STATS ── */
+    .stats-bar {
+      padding: 36px 0;
+      background: white;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .stat-item { text-align: center; padding: 20px 16px; }
+    .stat-item b { display: block; font-size: 34px; font-weight: 900; letter-spacing: -0.05em; background: linear-gradient(135deg, var(--pink), var(--yellow)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .stat-item span { color: var(--muted); font-size: 13px; font-weight: 700; }
+    .stat-divider { width: 1px; background: var(--line); align-self: stretch; display: none; }
+
+    /* ── GROWTH CHART ── */
+    .growth-section { padding: 64px 0 0; }
+    .section-tag { font-size: 13px; font-weight: 800; color: var(--pink); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+    .section-head { margin-bottom: 32px; }
+    .section-head h2 { font-size: clamp(28px, 4vw, 46px); font-weight: 900; letter-spacing: -0.05em; margin-bottom: 10px; color: var(--text); }
+    .section-head p { color: var(--muted); font-size: 16px; font-weight: 600; max-width: 600px; }
+    .chart-wrap {
+      background: white; border: 1px solid var(--line); border-radius: 24px;
+      padding: 28px 24px; box-shadow: 0 8px 32px rgba(255,95,160,0.08);
+    }
+
+    /* ── FEATURES ── */
+    .features-section { padding: 80px 0; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .feature-card {
+      background: white; border: 1.5px solid var(--line);
+      border-radius: 26px; padding: 28px 24px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; width: 100px; height: 100px;
+      border-radius: 50%; right: -30px; top: -30px;
+      background: linear-gradient(135deg, rgba(255,95,160,0.08), rgba(255,209,102,0.1));
+    }
+    .feature-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(255,95,160,0.15); border-color: rgba(255,95,160,0.3); }
+    .feat-icon {
+      width: 52px; height: 52px; border-radius: 16px; margin-bottom: 18px;
+      display: grid; place-items: center; font-size: 24px;
+      background: linear-gradient(135deg, rgba(255,95,160,0.12), rgba(255,209,102,0.12));
+      border: 1px solid rgba(255,95,160,0.15);
+    }
+    .feature-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+    .feature-card p { color: var(--muted); font-size: 14px; font-weight: 600; }
+
+    /* ── DOWNLOAD CTA ── */
+    .download-section { padding: 0 0 90px; }
+    .download-panel {
+      border-radius: 36px; overflow: hidden;
+      background: linear-gradient(135deg, var(--pink) 0%, #FF8EC4 50%, var(--yellow) 100%);
+      box-shadow: 0 24px 72px rgba(255,95,160,0.3);
+      padding: 54px 52px;
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center;
+      position: relative;
+    }
+    .download-panel::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(255,255,255,0.15)'/%3E%3C/svg%3E") repeat;
+    }
+    .dl-tag { font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.75); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+    .download-panel h2 { font-size: clamp(28px, 4vw, 46px); font-weight: 900; color: white; line-height: 1.05; margin-bottom: 16px; letter-spacing: -0.05em; }
+    .download-panel > div:first-child p { color: rgba(255,255,255,0.82); font-size: 16px; margin-bottom: 28px; font-weight: 600; }
+    .apk-btn {
+      display: inline-flex; align-items: center; gap: 14px;
+      background: white; color: var(--pink-deep); font-weight: 900;
+      padding: 16px 26px; border-radius: 20px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.14);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .apk-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
+    .apk-btn .apk-icon { font-size: 28px; }
+    .apk-btn small { display: block; color: var(--muted); font-weight: 700; font-size: 12px; }
+    .download-art { display: grid; place-items: center; min-height: 220px; }
+    .orb-wrap { position: relative; width: 220px; height: 220px; }
+    .orb-outer {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.35);
+      animation: spin-slow 8s linear infinite;
+    }
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+    .orb-inner {
+      position: absolute; inset: 30px; border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(8px);
+      display: grid; place-items: center;
+      font-size: 64px;
+    }
+
+    /* ── STEPS ── */
+    .steps-section { padding: 80px 0; background: white; }
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .step-card { padding: 28px 24px; border-radius: 24px; background: var(--bg); border: 1.5px solid var(--line); }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 14px; margin-bottom: 18px;
+      background: linear-gradient(135deg, var(--pink), var(--yellow));
+      display: grid; place-items: center; color: white; font-size: 18px; font-weight: 900;
+      box-shadow: 0 6px 18px rgba(255,95,160,0.3);
+    }
+    .step-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+    .step-card p { color: var(--muted); font-size: 14px; font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 48px 0 36px;
+      border-top: 1px solid var(--line);
+      background: white;
+    }
+    .footer-inner { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; color: var(--muted); font-size: 14px; font-weight: 600; }
+    .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .footer-links a:hover { color: var(--pink); }
+    .footer-brand-kyu { color: var(--text); font-weight: 900; font-size: 20px; }
+    .footer-brand-live { color: var(--pink); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-grid, .download-panel { grid-template-columns: 1fr; }
+      .phone-scene { min-height: 460px; }
+      .features-grid, .stats-grid, .steps-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .download-panel { padding: 40px 32px; }
+    }
+    @media (max-width: 580px) {
+      .shell { width: calc(100% - 28px); }
+      .hero { padding: 60px 0 52px; }
+      .hero-actions a, .hero-actions button { width: 100%; }
+      .phone { width: 256px; min-height: 490px; transform: none; }
+      .screen { min-height: 466px; }
+      .floating-card { right: 4px; bottom: 50px; }
+      .floating-card-2 { display: none; }
+      .features-grid, .stats-grid, .steps-grid { grid-template-columns: 1fr; }
+      .download-panel { grid-template-columns: 1fr; padding: 30px 24px; border-radius: 28px; }
+      .download-art { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav>
+    <div class="shell nav-inner">
+      <a class="brand" href="#top">
+        <span class="brand-logo">🎤</span>
+        <span><span class="brand-kyu">Kyu</span><span class="brand-live">Live</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Fitur</a>
+        <a href="#download">Download</a>
+        <a href="#cara">Cara Pakai</a>
+      </div>
+      <a class="nav-cta" href="#download">⬇ Download APK</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <div class="eyebrow"><span class="live-dot"></span>Platform Live Sosial #1</div>
+          <h1>
+            <span class="line1">Party, Chat &</span>
+            <span class="line2">Live Bareng!</span>
+          </h1>
+          <p class="lead">KyuLive menghadirkan party room audio, live streaming, chat seru, gift animasi, dan komunitas aktif dalam satu aplikasi yang ringan dan modern.</p>
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="scrollToDownload()">
+              <span>⬇</span> Download Android
+            </button>
+            <a class="btn-ghost" href="#features">Lihat Fitur 🎉</a>
+          </div>
+          <div class="hero-version" id="hero-version">Memuat info versi...</div>
+        </div>
+        <div class="phone-scene" aria-hidden="true">
+          <span class="sparkle sp1">✨</span>
+          <span class="sparkle sp2">🌸</span>
+          <span class="sparkle sp3">⭐</span>
+          <span class="sparkle sp4">💛</span>
+          <div class="halo-pink"></div>
+          <div class="halo-yellow"></div>
+          <div class="phone">
+            <div class="screen">
+              <div class="screen-topbar">
+                <div class="screen-brand">
+                  <span class="screen-logo">🎤</span>
+                  KyuLive
+                </div>
+                <span class="live-badge"><span class="live-dot" style="width:6px;height:6px;box-shadow:none"></span>LIVE</span>
+              </div>
+              <div class="chat-feed">
+                <div class="bubble">Party room malam ini rame banget! 🎉</div>
+                <div class="bubble me">Gabung yuk, ada gift special!</div>
+                <div class="bubble">Ada host baru lagi perform 🎤</div>
+                <div class="bubble me">Kirim bunga dulu~ 🌹</div>
+              </div>
+              <div class="party-card">
+                <h3>🎙 Party Room • Live</h3>
+                <div class="party-row"><span>Seat tersedia: 5/8</span><strong>324 nonton</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="floating-card">
+            <div class="fc-icon">🎁</div>
+            <b>Gift Terkirim!</b>
+            <small>Animasi real-time ke host favoritmu</small>
+          </div>
+          <div class="floating-card-2">
+            <b id="hero-stat-users">—</b>
+            <small>Pengguna aktif</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="shell stats-grid">
+        <div class="stat-item"><b id="stat-users">—</b><span>Pengguna terdaftar</span></div>
+        <div class="stat-item"><b id="stat-downloads">—</b><span>Total download</span></div>
+        <div class="stat-item"><b>10K+</b><span>Pesan per hari</span></div>
+        <div class="stat-item"><b>24/7</b><span>Komunitas online</span></div>
+      </div>
+    </div>
+
+    <!-- GROWTH CHART -->
+    <section class="growth-section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-tag">📈 Pertumbuhan</div>
+          <h2>Komunitas yang terus berkembang.</h2>
+          <p>Jumlah pengguna baru KyuLive dalam 12 bulan terakhir.</p>
+        </div>
+        <div class="chart-wrap">
+          <div id="growth-chart-inner" style="color:var(--muted);text-align:center;padding:32px 0;font-weight:600">Memuat data...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-section" id="features">
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-tag">🌟 Fitur Unggulan</div>
+          <h2>Satu app untuk semua seru-seruan.</h2>
+          <p>Dari party room hingga gift animasi — semuanya ada di KyuLive, cepat dan menyenangkan.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature-card">
+            <div class="feat-icon">🎙</div>
+            <h3>Party Room Audio</h3>
+            <p>Gabung ke room live dengan 8 kursi, ngobrol bareng host favorit, dan nikmati interaksi real-time.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feat-icon">💬</div>
+            <h3>Chatroom Live</h3>
+            <p>Bergabung ke komunitas chat berdasarkan minat, bahasa, dan topik favoritmu.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feat-icon">💌</div>
+            <h3>Pesan Pribadi</h3>
+            <p>Ngobrol satu lawan satu dengan tampilan modern, cepat, dan ringan dipakai.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feat-icon">🎁</div>
+            <h3>Virtual Gift</h3>
+            <p>Kirim gift animasi spektakuler ke host favoritmu dan buat momen makin meriah.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feat-icon">⭐</div>
+            <h3>Level & Ranking</h3>
+            <p>Bangun profil, kumpulkan poin, dan tampil di papan peringkat komunitas.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feat-icon">🔍</div>
+            <h3>Discover</h3>
+            <p>Temukan host, room live, dan komunitas baru yang sedang ramai setiap harinya.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD CTA -->
+    <section class="download-section" id="download">
+      <div class="shell">
+        <div class="download-panel">
+          <div>
+            <div class="dl-tag">📱 Download Sekarang</div>
+            <h2>Install KyuLive di Android-mu.</h2>
+            <p>Tersedia gratis sebagai APK langsung. Download, install, dan mulai party bersama ribuan teman baru!</p>
+            <a class="apk-btn" id="apk-btn" href="#" onclick="return handleDownload(event)">
+              <span class="apk-icon">📲</span>
+              <span>
+                <small id="apk-label-small">Memuat versi terbaru...</small>
+                Download APK Android
+              </span>
+            </a>
+            <p id="dl-changelog-note" style="font-size:13px;margin-top:12px;color:rgba(255,255,255,0.7);font-weight:600"></p>
+          </div>
+          <div class="download-art">
+            <div class="orb-wrap">
+              <div class="orb-outer"></div>
+              <div class="orb-inner">🎤</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEPS -->
+    <section class="steps-section" id="cara">
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-tag">🚀 Cara Mulai</div>
+          <h2>Mulai dalam 3 langkah mudah.</h2>
+          <p>Download APK, izinkan instalasi, dan langsung join komunitas KyuLive!</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <h3>Download APK</h3>
+            <p>Tekan tombol download dan simpan file APK ke perangkat Android-mu.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <h3>Izinkan Install</h3>
+            <p>Aktifkan izin install dari sumber tidak dikenal di pengaturan Android.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <h3>Login & Party! 🎉</h3>
+            <p>Buka KyuLive, daftar atau login, lalu langsung gabung party room pertamamu!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <div>
+        <a class="brand" href="#top">
+          <span class="brand-logo" style="width:32px;height:32px;font-size:15px;">🎤</span>
+          <span><span class="footer-brand-kyu">Kyu</span><span class="footer-brand-live">Live</span></span>
+        </a>
+        <p style="margin-top:10px;font-weight:600">© 2026 KyuLive. Semua hak dilindungi.</p>
+      </div>
+      <div class="footer-links">
+        <a href="/download">Download APK</a>
+        <a href="/terms">Syarat</a>
+        <a href="/privacy">Privasi</a>
+        <a href="mailto:support@chatmeapp.my.id">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const BASE = 'https://api.chatmeapp.my.id/api/public';
+    let latestRelease = null;
+
+    function fmtSize(bytes) {
+      if (!bytes || bytes === 0) return '';
+      const mb = bytes / (1024 * 1024);
+      return mb >= 1 ? `${mb.toFixed(1)} MB` : `${Math.round(bytes / 1024)} KB`;
+    }
+
+    function fmtNum(n) {
+      if (n >= 1000000) return (n / 1000000).toFixed(1).replace('.0','') + 'jt';
+      if (n >= 1000) return (n / 1000).toFixed(1).replace('.0','') + 'rb';
+      return String(n);
+    }
+
+    function scrollToDownload() {
+      document.getElementById('download').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function handleDownload(e) {
+      e.preventDefault();
+      if (latestRelease?.download_url) {
+        await fetch(`${BASE}/releases/${latestRelease.id}/download`, { method: 'POST' }).catch(() => {});
+        window.location.href = latestRelease.download_url;
+      } else {
+        scrollToDownload();
+      }
+      return false;
+    }
+
+    async function loadData() {
+      try {
+        const [statsRes, relRes] = await Promise.all([
+          fetch(`${BASE}/stats`),
+          fetch(`${BASE}/releases`)
+        ]);
+
+        if (statsRes.ok) {
+          const s = await statsRes.json();
+          const u = s.totalUsers ?? s.users ?? 0;
+          const d = s.totalDownloads ?? s.downloads ?? 0;
+          ['stat-users','hero-stat-users'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = fmtNum(u);
+          });
+          const sd = document.getElementById('stat-downloads');
+          if (sd) sd.textContent = fmtNum(d);
+        }
+
+        if (relRes.ok) {
+          const rData = await relRes.json();
+          const r = rData.release;
+          if (r) {
+            latestRelease = r;
+            const sz = fmtSize(r.file_size);
+            const apkLabel = document.getElementById('apk-label-small');
+            if (apkLabel) apkLabel.textContent = `v${r.version_name}${sz ? ' • ' + sz : ''}`;
+            const hv = document.getElementById('hero-version');
+            if (hv) hv.innerHTML = `Versi terbaru: <span>v${r.version_name}</span>`;
+            const cn = document.getElementById('dl-changelog-note');
+            if (cn && r.changelog) cn.textContent = r.changelog.split('\n')[0];
+          }
+        }
+      } catch (e) {
+        console.warn('[kyulive] data load error:', e);
+      }
+
+      // Growth chart
+      try {
+        const gr = await fetch(`${BASE}/growth`);
+        if (!gr.ok) throw new Error();
+        const gd = await gr.json();
+        const rows = gd.monthly ?? gd.data ?? [];
+        if (rows.length === 0) throw new Error('empty');
+
+        const maxV = Math.max(...rows.map(r => r.count ?? r.users ?? 0));
+        const wrap = document.getElementById('growth-chart-inner');
+        wrap.innerHTML = '';
+        wrap.style.cssText = 'display:flex;align-items:flex-end;gap:6px;height:180px;padding:0 4px';
+
+        rows.forEach(r => {
+          const v = r.count ?? r.users ?? 0;
+          const h = maxV > 0 ? Math.max(8, Math.round((v / maxV) * 100)) : 8;
+          const label = (r.month ?? r.label ?? '').slice(0, 7);
+          const col = document.createElement('div');
+          col.style.cssText = `flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;`;
+          col.innerHTML = `
+            <span style="font-size:11px;color:#9B7090;font-weight:700">${fmtNum(v)}</span>
+            <div style="width:100%;height:${h}%;border-radius:10px 10px 0 0;
+              background:linear-gradient(180deg,#FF5FA0,#FFD166);
+              box-shadow:0 4px 12px rgba(255,95,160,0.28);"></div>
+            <span style="font-size:10px;color:#C4A0B4;font-weight:600;writing-mode:vertical-rl;transform:rotate(180deg);height:46px;line-height:1.2">${label}</span>
+          `;
+          wrap.appendChild(col);
+        });
+      } catch {
+        const ci = document.getElementById('growth-chart-inner');
+        if (ci) ci.innerHTML = '<p style="color:var(--muted);text-align:center;padding:32px 0;font-weight:600">Data pertumbuhan belum tersedia.</p>';
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

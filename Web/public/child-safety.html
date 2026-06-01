@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Child Safety Standards — KyuLive</title>
+  <meta name="description" content="KyuLive Child Safety Standards — our commitment to protecting minors from sexual abuse and exploitation (CSAE)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --pink:      #FF5FA0;
+      --pink-deep: #F0317A;
+      --yellow:    #FFD166;
+      --bg:        #FFF5F9;
+      --white:     #ffffff;
+      --text:      #2D1A3E;
+      --muted:     #9B7090;
+      --line:      rgba(255,111,176,0.18);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 60% 40% at 90% 5%, rgba(255,209,102,0.12), transparent);
+    }
+    a { color: var(--pink); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,245,249,0.92);
+      backdrop-filter: blur(16px);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .header-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+    .logo-icon {
+      width: 36px; height: 36px; border-radius: 11px;
+      background: linear-gradient(135deg, var(--pink), var(--yellow));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; box-shadow: 0 4px 14px rgba(255,95,160,0.32);
+      text-decoration: none;
+    }
+    .logo-text { font-size: 18px; font-weight: 900; }
+    .logo-kyu { color: var(--text); }
+    .logo-live { color: var(--pink); }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 48px 24px 90px; position: relative; z-index: 1; }
+
+    h1 {
+      font-size: 34px; font-weight: 900; margin-bottom: 8px;
+      background: linear-gradient(90deg, var(--pink), var(--yellow));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .last-updated { color: var(--muted); font-size: 14px; margin-bottom: 36px; font-weight: 600; }
+    h2 { font-size: 20px; font-weight: 800; margin: 38px 0 12px; color: var(--pink); }
+    p, li { color: var(--text); margin-bottom: 12px; font-weight: 600; }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; }
+
+    .alert-card {
+      background: rgba(240,49,122,0.07);
+      border: 1.5px solid rgba(240,49,122,0.25);
+      border-radius: 16px; padding: 18px 22px; margin: 22px 0;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .alert-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+    .alert-card p { margin: 0; }
+
+    .info-card {
+      background: rgba(255,95,160,0.06);
+      border: 1.5px solid rgba(255,95,160,0.16);
+      border-radius: 16px; padding: 18px 22px; margin: 22px 0;
+    }
+    .info-card p { margin: 0; }
+
+    .report-card {
+      background: linear-gradient(135deg, rgba(255,95,160,0.10), rgba(255,209,102,0.08));
+      border: 2px solid rgba(255,95,160,0.22);
+      border-radius: 20px; padding: 24px 28px; margin: 32px 0;
+    }
+    .report-card h3 { font-size: 18px; font-weight: 900; color: var(--pink); margin-bottom: 12px; }
+    .report-card p, .report-card li { margin-bottom: 8px; }
+    .report-card a {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+      color: #fff; padding: 10px 22px; border-radius: 50px;
+      font-weight: 800; font-size: 15px; margin-top: 10px;
+      box-shadow: 0 4px 14px rgba(255,95,160,0.35);
+      text-decoration: none;
+    }
+    .report-card a:hover { opacity: 0.88; text-decoration: none; }
+
+    .footer { max-width: 860px; margin: 0 auto; padding: 32px 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; text-align: center; font-weight: 600; }
+    .footer a { margin: 0 8px; color: var(--pink); }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="/" class="logo-icon">🎤</a>
+      <a href="/" class="logo-text"><span class="logo-kyu">Kyu</span><span class="logo-live">Live</span></a>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Child Safety Standards</h1>
+    <p class="last-updated">Last updated: May 27, 2026</p>
+
+    <div class="alert-card">
+      <span class="alert-icon">🛡️</span>
+      <p>KyuLive has a zero-tolerance policy toward child sexual abuse and exploitation (CSAE). This page describes our safety standards, enforcement mechanisms, and how to report violations — in compliance with Google Play's Child Safety policy for social applications.</p>
+    </div>
+
+    <h2>1. Our Commitment</h2>
+    <p>KyuLive is a social platform for adults aged 18 and above. We are deeply committed to creating a safe environment and strictly prohibiting any content, behavior, or interaction that sexually exploits or endangers minors.</p>
+    <p>We comply with all applicable laws regarding child protection, including reporting obligations to relevant authorities.</p>
+
+    <h2>2. Prohibited Content &amp; Behavior</h2>
+    <p>The following are strictly forbidden on KyuLive and will result in immediate account termination and reporting to law enforcement:</p>
+    <ul>
+      <li>Any content depicting child sexual abuse material (CSAM) — including images, videos, audio, or text.</li>
+      <li>Grooming, soliciting, or communicating with minors for sexual purposes.</li>
+      <li>Sharing, distributing, or promoting CSAM in any form.</li>
+      <li>Using the platform to arrange or facilitate offline sexual contact with a minor.</li>
+      <li>Impersonating a minor to deceive other users.</li>
+      <li>Any sexualized depiction of minors, even if portrayed as fictional.</li>
+    </ul>
+
+    <h2>3. Age Verification &amp; Access Controls</h2>
+    <p>KyuLive requires users to provide their date of birth during registration. Accounts belonging to users under 18 are not permitted and will be permanently removed upon detection.</p>
+    <ul>
+      <li>Date of birth is collected and verified at registration.</li>
+      <li>Users under 18 are blocked from completing registration.</li>
+      <li>Moderators and automated systems monitor for underage users and take immediate action.</li>
+    </ul>
+
+    <h2>4. Content Moderation</h2>
+    <p>We use a combination of automated detection and human moderation to identify and remove CSAE content:</p>
+    <ul>
+      <li><strong>Automated scanning:</strong> All uploaded images and videos are scanned using hash-matching and AI-assisted detection to identify known CSAM.</li>
+      <li><strong>Human review:</strong> Reports flagged by users or automation are reviewed by our Trust &amp; Safety team within 24 hours.</li>
+      <li><strong>Immediate removal:</strong> Confirmed CSAE content is removed immediately, the responsible account is terminated, and evidence is preserved for law enforcement.</li>
+      <li><strong>Legal reporting:</strong> We report confirmed CSAM to the National Center for Missing &amp; Exploited Children (NCMEC) via CyberTipline, and to applicable local authorities.</li>
+    </ul>
+
+    <h2>5. In-App Reporting</h2>
+    <p>Every user, profile, message, post, and live stream has a built-in <strong>Report</strong> button. Reports related to child safety are escalated with the highest priority.</p>
+    <div class="info-card">
+      <p>To report: tap the ⋯ menu on any profile, message, or stream → select <strong>Report</strong> → choose <strong>Child Safety</strong> → submit. Our team will respond within 24 hours.</p>
+    </div>
+
+    <h2>6. Contact — Point of Contact (POC)</h2>
+    <p>Our designated Child Safety Point of Contact is responsible for handling CSAE reports, coordinating with law enforcement, and ensuring policy compliance.</p>
+    <ul>
+      <li><strong>Email:</strong> <a href="mailto:safety@chatmeapp.my.id">safety@chatmeapp.my.id</a></li>
+      <li><strong>Response time:</strong> Within 24 hours for child safety reports.</li>
+    </ul>
+
+    <div class="report-card">
+      <h3>🚨 Report Child Safety Violation</h3>
+      <p>If you have encountered content or behavior on KyuLive that you believe involves the sexual exploitation of a child, please contact us immediately:</p>
+      <ul>
+        <li>In-app: tap ⋯ → Report → Child Safety</li>
+        <li>Email: <a href="mailto:safety@chatmeapp.my.id" style="background:none;color:var(--pink);box-shadow:none;padding:0;margin:0;font-size:inherit;">safety@chatmeapp.my.id</a></li>
+      </ul>
+      <p style="margin-top:12px;">You may also report directly to the authorities:</p>
+      <ul>
+        <li><a href="https://www.missingkids.org/gethelpnow/cybertipline" target="_blank" rel="noopener">NCMEC CyberTipline (International)</a></li>
+        <li><a href="https://www.kominfo.go.id/" target="_blank" rel="noopener">Kementerian Kominfo (Indonesia)</a></li>
+      </ul>
+      <a href="mailto:safety@chatmeapp.my.id">Email Our Safety Team</a>
+    </div>
+
+    <h2>7. Employee &amp; Moderator Training</h2>
+    <p>All Trust &amp; Safety team members receive mandatory training on:</p>
+    <ul>
+      <li>Identifying CSAM and grooming behavior patterns.</li>
+      <li>Proper handling and preservation of evidence.</li>
+      <li>Legal reporting obligations under applicable law.</li>
+      <li>Victim-centric practices to avoid re-traumatization.</li>
+    </ul>
+
+    <h2>8. Policy Updates</h2>
+    <p>This Child Safety Standards document is reviewed and updated regularly. Any significant changes will be communicated through the app and on this page. The date at the top of this page reflects the most recent revision.</p>
+
+    <h2>9. Additional Resources</h2>
+    <ul>
+      <li><a href="https://www.missingkids.org/gethelpnow/cybertipline" target="_blank" rel="noopener">NCMEC CyberTipline</a> — report CSAM internationally</li>
+      <li><a href="https://www.inhope.org/" target="_blank" rel="noopener">INHOPE</a> — global network of hotlines for reporting online child abuse</li>
+      <li><a href="/privacy">KyuLive Privacy Policy</a></li>
+      <li><a href="/terms">KyuLive Terms of Service</a></li>
+    </ul>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 KyuLive. All rights reserved.</p>
+    <p style="margin-top:10px;">
+      <a href="/">Home</a>
+      <a href="/terms">Terms</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/child-safety">Child Safety</a>
+      <a href="mailto:safety@chatmeapp.my.id">Safety Contact</a>
+    </p>
+  </footer>
+</body>
+</html>

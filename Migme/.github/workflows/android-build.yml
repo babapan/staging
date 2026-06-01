@@ -1,0 +1,252 @@
+name: Android Build
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-debug:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout kode
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Accept Android SDK licenses
+        run: yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      - name: Perbaiki file PNG yang sebenarnya GIF (cegah AAPT error)
+        run: |
+          sudo apt-get install -y imagemagick >/dev/null 2>&1 || true
+          fixed=0
+          while IFS= read -r f; do
+            if file "$f" | grep -q "GIF image"; then
+              echo "Konversi GIF→PNG: $f"
+              magick "$f" "$f" || convert "$f" "$f"
+              fixed=$((fixed+1))
+            fi
+          done < <(find assets -iname "*.png" 2>/dev/null)
+          echo "Total file diperbaiki: $fixed"
+        working-directory: ${{ github.workspace }}
+
+      - name: Cache Gradle wrapper
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/wrapper
+          key: gradle-wrapper-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-wrapper-
+
+      - name: Cache Gradle caches
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: gradle-caches-${{ hashFiles('android/build.gradle', 'android/app/build.gradle') }}
+          restore-keys: gradle-caches-
+
+      - name: Generate Android project (expo prebuild)
+        run: npx expo prebuild --platform android --no-install
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          GOOGLE_ANDROID_CLIENT_ID: ${{ secrets.GOOGLE_ANDROID_CLIENT_ID }}
+
+      - name: Berikan izin eksekusi gradlew
+        working-directory: android
+        run: chmod +x gradlew
+
+      - name: Build Debug APK (arm64-v8a saja)
+        working-directory: android
+        run: ./gradlew assembleDebug -PreactNativeArchitectures=arm64-v8a --no-daemon --stacktrace
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: migme-debug-${{ github.sha }}
+          path: android/app/build/outputs/apk/debug/*.apk
+          retention-days: 14
+
+  build-release:
+    name: Build Release APK
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout kode
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Accept Android SDK licenses
+        run: yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      - name: Perbaiki file PNG yang sebenarnya GIF (cegah AAPT error)
+        run: |
+          sudo apt-get install -y imagemagick >/dev/null 2>&1 || true
+          fixed=0
+          while IFS= read -r f; do
+            if file "$f" | grep -q "GIF image"; then
+              echo "Konversi GIF→PNG: $f"
+              magick "$f" "$f" || convert "$f" "$f"
+              fixed=$((fixed+1))
+            fi
+          done < <(find assets -iname "*.png" 2>/dev/null)
+          echo "Total file diperbaiki: $fixed"
+        working-directory: ${{ github.workspace }}
+
+      - name: Cache Gradle wrapper
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/wrapper
+          key: gradle-wrapper-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-wrapper-
+
+      - name: Cache Gradle caches
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: gradle-caches-${{ hashFiles('android/build.gradle', 'android/app/build.gradle') }}
+          restore-keys: gradle-caches-
+
+      - name: Generate Android project (expo prebuild)
+        run: npx expo prebuild --platform android --no-install
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          GOOGLE_ANDROID_CLIENT_ID: ${{ secrets.GOOGLE_ANDROID_CLIENT_ID }}
+
+      - name: Aktifkan ProGuard & matikan split (single APK arm64-v8a)
+        working-directory: android
+        run: |
+          # Aktifkan ProGuard/R8 lewat gradle.properties.
+          if grep -q '^android.enableProguardInReleaseBuilds' gradle.properties; then
+            sed -i 's/^android.enableProguardInReleaseBuilds=.*/android.enableProguardInReleaseBuilds=true/' gradle.properties
+          else
+            echo 'android.enableProguardInReleaseBuilds=true' >> gradle.properties
+          fi
+          # shrinkResources OFF — di template RN ini flag-nya tidak terhubung
+          # ke minifyEnabled sehingga build bisa gagal kalau diaktifkan.
+          if grep -q '^android.enableShrinkResourcesInReleaseBuilds' gradle.properties; then
+            sed -i 's/^android.enableShrinkResourcesInReleaseBuilds=.*/android.enableShrinkResourcesInReleaseBuilds=false/' gradle.properties
+          fi
+          # MATIKAN split per-ABI supaya gradle hanya hasilkan 1 APK monolit,
+          # bukan beberapa APK termasuk universalApk (yang gendut karena
+          # berisi semua arsitektur).
+          if grep -q 'enableSeparateBuildPerCPUArchitecture' app/build.gradle; then
+            sed -i 's/def enableSeparateBuildPerCPUArchitecture = .*/def enableSeparateBuildPerCPUArchitecture = false/' app/build.gradle
+          fi
+          # Pastikan reactNativeArchitectures di gradle.properties hanya arm64-v8a
+          # (plugin withAbiFilter sudah set ini, tapi kita pastikan).
+          if grep -q '^reactNativeArchitectures' gradle.properties; then
+            sed -i 's/^reactNativeArchitectures=.*/reactNativeArchitectures=arm64-v8a/' gradle.properties
+          else
+            echo 'reactNativeArchitectures=arm64-v8a' >> gradle.properties
+          fi
+          # Tambah keep-rules tambahan langsung ke proguard-rules.pro
+          # supaya R8 tidak gagal karena missing class dari modul Expo/React.
+          # printf dipakai (bukan heredoc) supaya tidak ada leading-space.
+          printf '%s\n' '' \
+            '# === Tambahan keep-rules dari workflow (fallback) ===' \
+            '-dontwarn expo.modules.**' \
+            '-dontwarn com.facebook.react.**' \
+            '-dontwarn com.swmansion.**' \
+            '-dontwarn io.agora.**' \
+            '-dontwarn org.unimodules.**' \
+            '-dontwarn javax.annotation.**' \
+            '-keep class expo.modules.** { *; }' \
+            '-keep interface expo.modules.** { *; }' \
+            '-keep class com.facebook.react.** { *; }' \
+            '-keep class com.swmansion.** { *; }' \
+            '-keep class io.agora.** { *; }' \
+            '-keep class org.unimodules.** { *; }' \
+            '-dontwarn expo.modules.core.interfaces.services.**' \
+            '-keep class expo.modules.core.interfaces.services.** { *; }' \
+            >> app/proguard-rules.pro
+          echo "===== gradle.properties ====="
+          cat gradle.properties
+          echo "===== abi config di build.gradle ====="
+          grep -n 'enableSeparateBuildPerCPUArchitecture\|reactNativeArchitectures\|universalApk' app/build.gradle || true
+          echo "===== proguard-rules.pro (tail) ====="
+          tail -40 app/proguard-rules.pro
+
+      - name: Berikan izin eksekusi gradlew
+        working-directory: android
+        run: chmod +x gradlew
+
+      - name: Build Release APK (arm64-v8a saja + ProGuard)
+        working-directory: android
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a --no-daemon --stacktrace
+
+      - name: Tampilkan ukuran APK hasil build
+        run: |
+          echo "===== Daftar APK yang dihasilkan ====="
+          ls -lah android/app/build/outputs/apk/release/
+          echo ""
+          echo "===== Ukuran detail per APK ====="
+          for f in android/app/build/outputs/apk/release/*.apk; do
+            echo "$(du -h "$f" | cut -f1)  $f"
+          done
+          echo ""
+          echo "===== Native libraries (.so) di dalam APK ====="
+          APK=$(ls android/app/build/outputs/apk/release/*.apk | head -1)
+          if [ -n "$APK" ]; then
+            unzip -l "$APK" | grep '\.so$' | sort -k1 -n -r | awk '{ printf "%10d  %s\n", $1, $4 }'
+            echo ""
+            echo "===== Total ukuran .so per kategori ====="
+            unzip -l "$APK" | grep '\.so$' | awk '
+              /libagora/  {agora+=$1; next}
+              /libreact/  {react+=$1; next}
+              /libhermes/ {hermes+=$1; next}
+                          {other+=$1}
+              END {
+                printf "  Agora native libs : %.1f MB\n", agora/1024/1024
+                printf "  React Native libs : %.1f MB\n", react/1024/1024
+                printf "  Hermes JS engine  : %.1f MB\n", hermes/1024/1024
+                printf "  Lain-lain         : %.1f MB\n", other/1024/1024
+              }'
+          fi
+
+      - name: Hapus APK 'universal' kalau ada (cegah download yang gendut)
+        run: |
+          rm -f android/app/build/outputs/apk/release/*universal*.apk
+          echo "Sisa APK setelah cleanup:"
+          ls -lah android/app/build/outputs/apk/release/
+
+      - name: Upload Release APK (arm64-v8a saja)
+        uses: actions/upload-artifact@v4
+        with:
+          name: migme-release-${{ github.sha }}
+          path: android/app/build/outputs/apk/release/*.apk
+          retention-days: 30
+          

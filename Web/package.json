@@ -1,0 +1,13 @@
+{
+  "name": "max99-web",
+  "version": "1.0.0",
+  "description": "max99 landing page",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

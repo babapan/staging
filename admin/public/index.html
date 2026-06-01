@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max99 panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --primary-light: #ede9fe;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --warning: #d97706;
+      --info: #0284c7;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --sidebar-w: 240px;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; }
+
+    /* Layout */
+    #app { display: flex; min-height: 100vh; }
+    #sidebar {
+      width: var(--sidebar-w); background: #1e1b4b; color: #c4b5fd;
+      display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+    }
+    #sidebar .logo {
+      padding: 20px 16px; border-bottom: 1px solid #312e81;
+      font-size: 18px; font-weight: 700; color: #fff;
+      display: flex; align-items: center; gap: 10px;
+    }
+    #sidebar .logo-icon { font-size: 24px; }
+    #sidebar nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
+    #sidebar nav .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      border-radius: 8px; margin-bottom: 2px; cursor: pointer;
+      font-size: 14px; font-weight: 500; transition: all 0.15s;
+      color: #c4b5fd;
+    }
+    #sidebar nav .nav-item:hover { background: #312e81; color: #fff; }
+    #sidebar nav .nav-item.active { background: #7c3aed; color: #fff; }
+    #sidebar nav .nav-item .icon { font-size: 18px; width: 20px; text-align: center; }
+    #sidebar .user-info {
+      padding: 12px 16px; border-top: 1px solid #312e81;
+      font-size: 13px; display: flex; align-items: center; gap: 10px;
+    }
+    #sidebar .user-info .avatar {
+      width: 32px; height: 32px; border-radius: 50%; background: #7c3aed;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 600; font-size: 14px;
+    }
+    #sidebar .user-info .name { color: #fff; font-weight: 500; font-size: 13px; }
+    #sidebar .user-info .role { color: #a78bfa; font-size: 11px; }
+    #sidebar .logout-btn {
+      margin-left: auto; background: none; border: none; color: #a78bfa;
+      padding: 4px 8px; border-radius: 6px; font-size: 12px; cursor: pointer;
+    }
+    #sidebar .logout-btn:hover { background: #312e81; color: #fff; }
+
+    #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+    #topbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 56px; display: flex; align-items: center;
+      justify-content: space-between; position: sticky; top: 0; z-index: 50;
+    }
+    #topbar h1 { font-size: 18px; font-weight: 600; }
+    #content { padding: 24px; flex: 1; }
+
+    /* Cards */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .card-title { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* Stat cards */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .stat-card .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    .stat-card .stat-value { font-size: 28px; font-weight: 700; }
+    .stat-card .stat-sub { font-size: 12px; color: var(--text-muted); }
+    .stat-card.purple { border-left: 4px solid #7c3aed; }
+    .stat-card.green { border-left: 4px solid #16a34a; }
+    .stat-card.red { border-left: 4px solid #dc2626; }
+    .stat-card.blue { border-left: 4px solid #0284c7; }
+    .stat-card.orange { border-left: 4px solid #d97706; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead { background: var(--bg); }
+    th { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    td { padding: 12px 16px; border-top: 1px solid var(--border); vertical-align: middle; }
+    tr:hover td { background: var(--bg); }
+
+    /* Badge */
+    .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .badge.green { background: #dcfce7; color: #15803d; }
+    .badge.red { background: #fee2e2; color: #dc2626; }
+    .badge.yellow { background: #fef9c3; color: #a16207; }
+    .badge.blue { background: #dbeafe; color: #1d4ed8; }
+    .badge.purple { background: #ede9fe; color: #7c3aed; }
+    .badge.gray { background: #f1f5f9; color: #475569; }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; border: none; transition: all 0.15s; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-success:hover { background: #15803d; }
+    .btn-sm { padding: 4px 10px; font-size: 12px; border-radius: 6px; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--bg); }
+
+    /* Inputs */
+    .input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--surface); color: var(--text); outline: none; transition: border 0.15s; }
+    .input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px #ede9fe; }
+    .search-row { display: flex; gap: 12px; margin-bottom: 16px; align-items: center; }
+    .search-row .input { max-width: 300px; }
+
+    /* Select */
+    select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+
+    /* Pagination */
+    .pagination { display: flex; gap: 8px; align-items: center; margin-top: 16px; justify-content: flex-end; }
+    .page-info { font-size: 13px; color: var(--text-muted); margin-right: auto; }
+
+    /* Login */
+    #login-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #f97316 0%, #fb923c 55%, #fed7aa 100%);
+    }
+    .login-card {
+      background: #fff; border-radius: 16px; padding: 40px; width: 380px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    }
+    .login-card h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; color: #9a3412; text-transform: lowercase; }
+    .login-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+    .error-msg { color: var(--danger); font-size: 13px; margin-top: 8px; }
+    #login-screen .input:focus { border-color: #f97316; box-shadow: 0 0 0 3px #ffedd5; }
+    .login-btn { width: 100%; padding: 12px; background: #f97316; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+    .login-btn:hover { background: #ea580c; }
+
+    /* Loading */
+    .loading { text-align: center; padding: 40px; color: var(--text-muted); }
+    .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Charts area */
+    .chart-bar-wrap { display: flex; flex-direction: column; gap: 8px; }
+    .chart-bar-row { display: flex; align-items: center; gap: 10px; }
+    .chart-bar-label { font-size: 12px; width: 100px; color: var(--text-muted); text-align: right; }
+    .chart-bar-bg { flex: 1; height: 12px; background: var(--bg); border-radius: 6px; overflow: hidden; }
+    .chart-bar-fill { height: 100%; background: var(--primary); border-radius: 6px; transition: width 0.5s ease; }
+    .chart-bar-val { font-size: 12px; width: 60px; font-weight: 600; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* Confirm dialog */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+    #confirm-modal { z-index: 1000; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: #fff; border-radius: 12px; padding: 24px; max-width: 400px; width: 90%; }
+    .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+    .modal p { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    .empty { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
+
+    /* ── Gift Grid ─────────────────────────────────────────── */
+    .gift-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+    .gift-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; text-align: center; transition: box-shadow 0.15s; position: relative;
+    }
+    .gift-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .gift-card .gift-img-wrap {
+      width: 72px; height: 72px; margin: 0 auto 10px;
+      border-radius: 10px; background: var(--bg);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .gift-card .gift-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .gift-card .gift-emoji { font-size: 40px; line-height: 1; }
+    .gift-card .gift-name { font-weight: 600; font-size: 13px; margin-bottom: 3px; }
+    .gift-card .gift-price { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+    .gift-card .gift-actions { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+    .gift-card .vip-ribbon {
+      position: absolute; top: 8px; right: 8px;
+      background: #7c3aed; color: #fff; font-size: 9px; font-weight: 700;
+      padding: 2px 5px; border-radius: 4px;
+    }
+    .gift-card .no-img-badge {
+      font-size: 10px; color: var(--text-muted); margin-bottom: 4px; display: block;
+    }
+    .gift-card .has-img-badge {
+      font-size: 10px; color: var(--success); margin-bottom: 4px; display: block; font-weight: 600;
+    }
+
+    /* Category Tabs */
+    .cat-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .cat-tab {
+      padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 500;
+      border: 1px solid var(--border); background: var(--surface); cursor: pointer; transition: all 0.15s;
+    }
+    .cat-tab:hover { border-color: var(--primary); color: var(--primary); }
+    .cat-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* Gift Modal */
+    .gift-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); z-index: 300;
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .gift-modal-overlay.open { display: flex; }
+    .gift-modal {
+      background: #fff; border-radius: 16px; width: 100%; max-width: 680px;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .gift-modal-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; background: #fff; z-index: 1;
+    }
+    .gift-modal-header h2 { font-size: 18px; font-weight: 700; }
+    .gift-modal-close {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      background: var(--bg); color: var(--text-muted); font-size: 18px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .gift-modal-close:hover { background: var(--border); }
+    .gift-modal-body { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 560px) { .gift-modal-body { grid-template-columns: 1fr; } }
+    .gift-modal-footer {
+      padding: 16px 24px; border-top: 1px solid var(--border);
+      display: flex; gap: 10px; justify-content: flex-end;
+      position: sticky; bottom: 0; background: #fff;
+    }
+    .field-group { display: flex; flex-direction: column; gap: 5px; }
+    .field-group label { font-size: 13px; font-weight: 500; color: var(--text); }
+    .field-group .hint { font-size: 11px; color: var(--text-muted); }
+
+    /* Image Upload Zone */
+    .upload-zone {
+      border: 2px dashed var(--border); border-radius: 12px;
+      padding: 20px; text-align: center; cursor: pointer;
+      transition: all 0.15s; background: var(--bg); position: relative;
+    }
+    .upload-zone:hover, .upload-zone.drag-over { border-color: var(--primary); background: var(--primary-light); }
+    .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+    .upload-zone .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-zone p { font-size: 13px; color: var(--text-muted); }
+    .upload-zone p strong { color: var(--primary); }
+
+    .img-preview-wrap {
+      width: 100%; aspect-ratio: 1; border-radius: 12px;
+      border: 1px solid var(--border); overflow: hidden;
+      background: var(--bg); display: flex; align-items: center; justify-content: center;
+    }
+    .img-preview-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .img-preview-wrap .preview-emoji { font-size: 64px; }
+
+    .upload-progress { margin-top: 10px; }
+    .upload-progress .progress-bar {
+      height: 6px; background: var(--bg); border-radius: 6px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .upload-progress .progress-fill { height: 100%; background: var(--primary); border-radius: 6px; transition: width 0.3s; }
+    .upload-msg { font-size: 12px; margin-top: 6px; }
+    .upload-msg.success { color: var(--success); }
+    .upload-msg.error { color: var(--danger); }
+
+    /* ── Store Tabs ────────────────────────────────────────── */
+    .store-tab-bar {
+      display: flex; gap: 4px; margin-bottom: 20px;
+      border-bottom: 2px solid var(--border); padding-bottom: 0;
+    }
+    .store-tab {
+      padding: 8px 20px; font-size: 14px; font-weight: 600; border: none;
+      background: none; cursor: pointer; color: var(--text-muted);
+      border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
+    }
+    .store-tab:hover { color: var(--text); }
+    .store-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    /* ── Sticker Pack Cards ─────────────────────────────────── */
+    .sticker-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px;
+    }
+    .sticker-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px 8px; text-align: center; transition: box-shadow 0.15s; position: relative;
+    }
+    .sticker-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .sticker-card .sticker-img-wrap {
+      width: 60px; height: 60px; margin: 0 auto 6px;
+      border-radius: 8px; background: var(--bg);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .sticker-card .sticker-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .sticker-card .sticker-alias {
+      font-size: 11px; font-weight: 600; margin-bottom: 4px; word-break: break-all; line-height: 1.3;
+    }
+    .sticker-card .sticker-actions { display: flex; gap: 4px; justify-content: center; margin-top: 6px; }
+    .no-sticker-img { font-size: 9px; color: var(--text-muted); }
+    .has-sticker-img { font-size: 9px; color: var(--success); font-weight: 600; }
+
+    /* Sticker detail breadcrumb */
+    .sticker-breadcrumb {
+      display: flex; align-items: center; gap: 8px; font-size: 14px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .sticker-breadcrumb .bc-link {
+      color: var(--primary); cursor: pointer; font-weight: 500;
+    }
+    .sticker-breadcrumb .bc-link:hover { text-decoration: underline; }
+
+    /* ── Credit History Panel ─────────────────────────────── */
+    #history-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 400;
+    }
+    #history-backdrop.open { display: block; }
+    #history-panel {
+      position: fixed; top: 0; right: -520px; bottom: 0; width: 520px; max-width: 100vw;
+      background: #fff; z-index: 401; display: flex; flex-direction: column;
+      box-shadow: -8px 0 40px rgba(0,0,0,0.2);
+      transition: right 0.28s cubic-bezier(.4,0,.2,1);
+    }
+    #history-panel.open { right: 0; }
+    #history-panel-header {
+      padding: 18px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      background: #1e1b4b; color: #fff; flex-shrink: 0;
+    }
+    #history-panel-header h2 { font-size: 16px; font-weight: 700; }
+    #history-panel-header .close-btn {
+      width: 30px; height: 30px; border-radius: 50%; border: none;
+      background: rgba(255,255,255,0.15); color: #fff; font-size: 16px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    #history-panel-header .close-btn:hover { background: rgba(255,255,255,0.25); }
+    #history-panel-body { flex: 1; overflow-y: auto; padding: 16px; }
+    #history-panel-footer {
+      padding: 12px 16px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0; background: var(--bg);
+    }
+    .history-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .history-icon.in  { background: #dcfce7; }
+    .history-icon.out { background: #fee2e2; }
+    .history-icon.neu { background: #f1f5f9; }
+    .history-label { flex: 1; min-width: 0; }
+    .history-label .hl-main { font-size: 14px; font-weight: 500; color: var(--text); word-break: break-word; }
+    .history-label .hl-sub  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .history-amount { font-size: 14px; font-weight: 700; flex-shrink: 0; text-align: right; }
+    .history-amount.in  { color: var(--success); }
+    .history-amount.out { color: var(--danger); }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 500;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .toast-item {
+      padding: 12px 18px; border-radius: 10px; font-size: 14px; font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15); animation: slideIn 0.2s ease;
+      max-width: 320px;
+    }
+    .toast-item.success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .toast-item.error { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+    .toast-item.info { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="toast"></div>
+
+  <!-- Confirm Modal -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal">
+      <h3 id="modal-title">Konfirmasi</h3>
+      <p id="modal-body">Apakah Anda yakin?</p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal()">Batal</button>
+        <button class="btn btn-danger" id="modal-confirm-btn">Konfirmasi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Room Modal -->
+  <div class="gift-modal-overlay" id="create-room-modal">
+    <div class="gift-modal" style="max-width:560px">
+      <div class="gift-modal-header">
+        <h2>🏠 Buat Chatroom Baru</h2>
+        <button class="gift-modal-close" onclick="closeCreateRoomModal()">✕</button>
+      </div>
+      <div style="padding:24px;display:flex;flex-direction:column;gap:16px">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="field-group" style="grid-column:span 2">
+            <label>Nama Room <span style="color:var(--danger)">*</span></label>
+            <input class="input" id="crm-name" type="text" placeholder="Contoh: Indonesia, Game Talk..." maxlength="60" />
+            <span class="hint">Nama unik, tidak boleh sama dengan room yang sudah ada</span>
+          </div>
+
+          <div class="field-group" style="grid-column:span 2">
+            <label>Deskripsi</label>
+            <input class="input" id="crm-desc" type="text" placeholder="Deskripsi singkat tentang room ini..." maxlength="120" />
+          </div>
+
+          <div class="field-group">
+            <label>Kategori <span style="color:var(--danger)">*</span></label>
+            <select class="input" id="crm-category">
+              <option value="1">General</option>
+              <option value="2">Social</option>
+              <option value="3">Entertainment</option>
+              <option value="4">Friends / Cari Teman</option>
+              <option value="5">Business</option>
+              <option value="6">Help &amp; Support</option>
+              <option value="7">Games</option>
+              <option value="8" selected>Regional / Indonesia</option>
+              <option value="9">Music</option>
+              <option value="10">News &amp; Info</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label>Kapasitas Maksimal</label>
+            <input class="input" id="crm-capacity" type="number" min="2" max="200" value="25" />
+          </div>
+
+          <div class="field-group">
+            <label>Bahasa</label>
+            <select class="input" id="crm-language">
+              <option value="id" selected>🇮🇩 Indonesia</option>
+              <option value="en">🇬🇧 English</option>
+              <option value="ms">🇲🇾 Melayu</option>
+              <option value="other">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label>Tipe Room</label>
+            <select class="input" id="crm-type">
+              <option value="official">Official (milik sistem)</option>
+              <option value="user">User (milik pengguna)</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label>Warna Room</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input class="input" id="crm-color" type="text" value="#4CAF50" placeholder="#4CAF50" style="flex:1" />
+              <input type="color" id="crm-color-picker" value="#4CAF50" style="width:38px;height:38px;border:1px solid var(--border);border-radius:6px;cursor:pointer;padding:2px" oninput="document.getElementById('crm-color').value=this.value" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Owner (username, opsional)</label>
+            <input class="input" id="crm-owner" type="text" placeholder="Kosongkan = tidak ada owner" />
+          </div>
+        </div>
+
+        <div style="display:flex;gap:20px;padding:12px 0;border-top:1px solid var(--border)">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="crm-adult" style="width:16px;height:16px;accent-color:var(--danger)" />
+            <span>18+ / Adult Only</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="crm-allow-kick" checked style="width:16px;height:16px;accent-color:var(--primary)" />
+            <span>Boleh Kick Member</span>
+          </label>
+        </div>
+
+      </div>
+      <div class="gift-modal-footer">
+        <button class="btn btn-outline" onclick="closeCreateRoomModal()">Batal</button>
+        <button class="btn btn-primary" id="crm-save-btn" onclick="saveCreateRoom()">🏠 Buat Room</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Room Modal -->
+  <div class="gift-modal-overlay" id="edit-room-modal">
+    <div class="gift-modal" style="max-width:460px">
+      <div class="gift-modal-header">
+        <h2 id="erm-title">✏️ Edit Chatroom</h2>
+        <button class="gift-modal-close" onclick="closeEditRoomModal()">✕</button>
+      </div>
+      <div style="padding:24px;display:flex;flex-direction:column;gap:18px">
+        <div style="background:var(--bg);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-muted)">
+          Room: <strong id="erm-room-name" style="color:var(--text)"></strong>
+        </div>
+
+        <div class="field-group">
+          <label>Kapasitas Maksimal</label>
+          <input class="input" id="erm-capacity" type="number" min="2" max="200" placeholder="25" />
+          <span class="hint">Jumlah maksimal peserta dalam room ini</span>
+        </div>
+
+        <div class="field-group">
+          <label>Kategori</label>
+          <select class="input" id="erm-category">
+            <option value="1">1 — General</option>
+            <option value="2">2 — Social</option>
+            <option value="3">3 — Entertainment</option>
+            <option value="4">4 — Friends / Cari Teman</option>
+            <option value="5">5 — Business</option>
+            <option value="6">6 — Help &amp; Support</option>
+            <option value="7">7 — Games</option>
+            <option value="8">8 — Regional / Indonesia</option>
+            <option value="9">9 — Music</option>
+            <option value="10">10 — News &amp; Info</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label>Ganti Owner (username)</label>
+          <input class="input" id="erm-owner" type="text" placeholder="Kosongkan = tidak ada owner" />
+          <span class="hint">Masukkan username baru sebagai pemilik room</span>
+        </div>
+      </div>
+      <div class="gift-modal-footer">
+        <button class="btn btn-outline" onclick="closeEditRoomModal()">Batal</button>
+        <button class="btn btn-primary" id="erm-save-btn" onclick="saveEditRoom()">💾 Simpan Perubahan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gift Add/Edit Modal -->
+  <div class="gift-modal-overlay" id="gift-modal">
+    <div class="gift-modal">
+      <div class="gift-modal-header">
+        <h2 id="gm-title">Tambah Gift</h2>
+        <button class="gift-modal-close" onclick="closeGiftModal()">✕</button>
+      </div>
+      <div class="gift-modal-body">
+        <!-- Left: Form Fields -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="field-group">
+            <label>Nama Gift <span style="color:var(--danger)">*</span></label>
+            <input class="input" id="gm-name" placeholder="contoh: rose, diamond..." />
+            <span class="hint">Nama unik, huruf kecil tanpa spasi</span>
+          </div>
+          <div class="field-group">
+            <label>Emoji / HotKey</label>
+            <input class="input" id="gm-hotkey" placeholder="🌹" style="font-size:18px" />
+            <span class="hint">Emoji yang ditampilkan jika tidak ada gambar</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="field-group">
+              <label>Harga <span style="color:var(--danger)">*</span></label>
+              <input class="input" id="gm-price" type="number" min="0" placeholder="10" />
+            </div>
+            <div class="field-group">
+              <label>Mata Uang</label>
+              <select class="input" id="gm-currency">
+                <option value="IDR">IDR</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Kategori (Group)</label>
+            <select class="input" id="gm-group">
+              <!-- filled dynamically -->
+            </select>
+            <span class="hint">Kelompok gift di gift picker</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="field-group">
+              <label>Sort Order</label>
+              <input class="input" id="gm-sort" type="number" min="1" placeholder="99" />
+            </div>
+            <div class="field-group">
+              <label>Jumlah Tersedia</label>
+              <input class="input" id="gm-available" type="number" min="0" placeholder="∞ (kosongkan)" />
+              <span class="hint">Kosongkan = tidak terbatas</span>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Pesan Gift All</label>
+            <input class="input" id="gm-msg" placeholder="Pesan saat gift all..." />
+          </div>
+          <div style="display:flex;gap:16px;align-items:center">
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+              <input type="checkbox" id="gm-vip" style="width:16px;height:16px" />
+              <span>VIP Only</span>
+            </label>
+            <div class="field-group" style="flex:1">
+              <label>Status</label>
+              <select class="input" id="gm-status">
+                <option value="1">Aktif</option>
+                <option value="0">Nonaktif</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Image Upload -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="field-group">
+            <label>Gambar Gift (ImageKit CDN)</label>
+          </div>
+          <div class="img-preview-wrap" id="gm-preview">
+            <span class="preview-emoji" id="gm-preview-emoji">🎁</span>
+          </div>
+          <div class="upload-zone" id="gm-upload-zone">
+            <input type="file" id="gm-file" accept="image/png,image/jpeg,image/gif,image/webp" />
+            <div class="upload-icon">📁</div>
+            <p><strong>Klik atau drag & drop</strong><br>PNG, JPG, GIF, WEBP — maks 5MB</p>
+          </div>
+          <div class="upload-progress" id="gm-upload-progress" style="display:none">
+            <div class="progress-bar"><div class="progress-fill" id="gm-progress-fill" style="width:0%"></div></div>
+            <div class="upload-msg" id="gm-upload-msg"></div>
+          </div>
+          <div id="gm-current-img" style="display:none">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+              <span style="font-size:12px;color:var(--success);font-weight:600">✓ Gambar aktif di CDN</span>
+              <button class="btn btn-sm btn-danger" id="gm-del-img-btn">Hapus Gambar</button>
+            </div>
+            <a id="gm-img-link" href="#" target="_blank" style="font-size:11px;color:var(--info);word-break:break-all;margin-top:4px;display:block"></a>
+          </div>
+          <p style="font-size:11px;color:var(--text-muted);line-height:1.5">
+            Gambar diupload langsung ke <strong>ImageKit CDN</strong> dan otomatis dipakai sebagai tampilan gift di aplikasi.
+          </p>
+        </div>
+      </div>
+      <div class="gift-modal-footer">
+        <button class="btn btn-outline" onclick="closeGiftModal()">Batal</button>
+        <button class="btn btn-primary" id="gm-save-btn" onclick="saveGift()">Simpan Gift</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticker Pack Add/Edit Modal -->
+  <div class="gift-modal-overlay" id="sticker-pack-modal">
+    <div class="gift-modal" style="max-width:560px">
+      <div class="gift-modal-header">
+        <h2 id="spm-title">Tambah Pack Stiker</h2>
+        <button class="gift-modal-close" onclick="closeStickerPackModal()">✕</button>
+      </div>
+      <div class="gift-modal-body" style="grid-template-columns:1fr">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="field-group">
+              <label>Nama Pack <span style="color:var(--danger)">*</span></label>
+              <input class="input" id="spm-name" placeholder="misal: Cute Animals, Funny Faces..." />
+            </div>
+            <div class="field-group">
+              <label>Tipe</label>
+              <select class="input" id="spm-type">
+                <option value="1">Stiker</option>
+                <option value="0">Emotikon</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Deskripsi</label>
+            <input class="input" id="spm-desc" placeholder="Deskripsi singkat pack stiker..." />
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+            <div class="field-group">
+              <label>Harga</label>
+              <input class="input" id="spm-price" type="number" min="0" step="1" placeholder="0" />
+              <span class="hint">0 = Gratis</span>
+            </div>
+            <div class="field-group">
+              <label>Sort Order</label>
+              <input class="input" id="spm-sort" type="number" min="1" placeholder="99" />
+            </div>
+            <div class="field-group">
+              <label>Status</label>
+              <select class="input" id="spm-status">
+                <option value="1">Aktif</option>
+                <option value="0">Nonaktif</option>
+              </select>
+            </div>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="spm-forsale" checked style="width:16px;height:16px" />
+            <span>Dijual (For Sale)</span>
+          </label>
+        </div>
+      </div>
+      <div class="gift-modal-footer">
+        <button class="btn btn-outline" onclick="closeStickerPackModal()">Batal</button>
+        <button class="btn btn-primary" id="spm-save-btn" onclick="saveStickerPack()">Simpan Pack</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticker Item Add/Edit Modal -->
+  <div class="gift-modal-overlay" id="sticker-item-modal">
+    <div class="gift-modal" style="max-width:560px">
+      <div class="gift-modal-header">
+        <h2 id="sim-title">Tambah Stiker</h2>
+        <button class="gift-modal-close" onclick="closeStickerItemModal()">✕</button>
+      </div>
+      <div class="gift-modal-body">
+        <!-- Left: Fields -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="field-group">
+            <label>Alias <span style="color:var(--danger)">*</span></label>
+            <input class="input" id="sim-alias" placeholder="misal: happy, sad, love..." />
+            <span class="hint">Nama unik stiker dalam pack ini</span>
+          </div>
+          <div class="field-group">
+            <label>Tipe</label>
+            <select class="input" id="sim-type">
+              <option value="0">Emotikon (0)</option>
+              <option value="1">Stiker (1)</option>
+            </select>
+          </div>
+          <p style="font-size:12px;color:var(--text-muted);line-height:1.6">
+            Gambar diupload ke <strong>ImageKit CDN</strong>.<br>
+            Format: PNG, JPG, GIF, WEBP — maks 5MB.<br>
+            PNG transparan direkomendasikan untuk stiker.
+          </p>
+        </div>
+        <!-- Right: Image Upload -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="field-group"><label>Gambar Stiker (ImageKit CDN)</label></div>
+          <div class="img-preview-wrap" id="sim-preview">
+            <span class="preview-emoji" id="sim-preview-emoji">😊</span>
+          </div>
+          <div class="upload-zone" id="sim-upload-zone">
+            <input type="file" id="sim-file" accept="image/png,image/jpeg,image/gif,image/webp" />
+            <div class="upload-icon">📁</div>
+            <p><strong>Klik atau drag & drop</strong><br>PNG, JPG, GIF, WEBP — maks 5MB</p>
+          </div>
+          <div class="upload-progress" id="sim-upload-progress" style="display:none">
+            <div class="progress-bar"><div class="progress-fill" id="sim-progress-fill" style="width:0%"></div></div>
+            <div class="upload-msg" id="sim-upload-msg"></div>
+          </div>
+          <div id="sim-current-img" style="display:none">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+              <span style="font-size:12px;color:var(--success);font-weight:600">✓ Gambar aktif di CDN</span>
+              <button class="btn btn-sm btn-danger" id="sim-del-img-btn">Hapus Gambar</button>
+            </div>
+            <a id="sim-img-link" href="#" target="_blank" style="font-size:11px;color:var(--info);word-break:break-all;margin-top:4px;display:block"></a>
+          </div>
+        </div>
+      </div>
+      <div class="gift-modal-footer">
+        <button class="btn btn-outline" onclick="closeStickerItemModal()">Batal</button>
+        <button class="btn btn-primary" id="sim-save-btn" onclick="saveStickerItem()">Simpan Stiker</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Credit History Panel -->
+  <div id="history-backdrop" onclick="closeHistoryPanel()"></div>
+  <div id="history-panel">
+    <div id="history-panel-header">
+      <h2 id="history-panel-title">Riwayat Kredit</h2>
+      <button class="close-btn" onclick="closeHistoryPanel()">✕</button>
+    </div>
+    <div id="history-panel-body">
+      <div class="loading"><div class="spinner"></div>Memuat...</div>
+    </div>
+    <div id="history-panel-footer">
+      <span id="history-page-info" style="font-size:13px;color:var(--text-muted)"></span>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" id="history-prev-btn" style="display:none">← Prev</button>
+        <button class="btn btn-outline btn-sm" id="history-next-btn" style="display:none">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

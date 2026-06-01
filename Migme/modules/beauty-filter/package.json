@@ -1,0 +1,11 @@
+{
+  "name": "@migme/beauty-filter",
+  "version": "1.0.0",
+  "description": "Native beauty filter frame processor for LiveKit WebRTC video",
+  "main": "src/index.ts",
+  "private": true,
+  "peerDependencies": {
+    "react-native": "*",
+    "@livekit/react-native-webrtc": "*"
+  }
+}

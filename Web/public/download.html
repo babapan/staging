@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download APK — KyuLive</title>
+  <meta name="description" content="Download aplikasi KyuLive untuk Android. Versi terbaru, changelog, dan panduan instalasi." />
+  <meta property="og:title" content="Download KyuLive untuk Android" />
+  <meta property="og:description" content="Aplikasi live party & chat komunitas. Download APK terbaru langsung dari developer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --pink:      #FF5FA0;
+      --pink-2:    #FF85B8;
+      --pink-deep: #F0317A;
+      --yellow:    #FFD166;
+      --peach:     #FFAA80;
+      --bg:        #FFF5F9;
+      --white:     #ffffff;
+      --text:      #2D1A3E;
+      --muted:     #9B7090;
+      --card:      rgba(255,255,255,0.92);
+      --line:      rgba(255,111,176,0.18);
+      --success:   #22C55E;
+      --warning:   #F59E0B;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 10% 5%, rgba(255,95,160,0.1), transparent),
+        radial-gradient(ellipse 50% 40% at 90% 10%, rgba(255,209,102,0.14), transparent);
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* HEADER */
+    .header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,245,249,0.9);
+      backdrop-filter: blur(16px);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .header-inner {
+      max-width: 1080px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 20px; }
+    .logo-icon {
+      width: 36px; height: 36px; border-radius: 11px;
+      background: linear-gradient(135deg, var(--pink), var(--yellow));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; box-shadow: 0 4px 14px rgba(255,95,160,0.32);
+    }
+    .brand-kyu { color: var(--text); }
+    .brand-live { color: var(--pink); }
+    .nav-link {
+      color: var(--muted); font-size: 14px; font-weight: 700;
+      padding: 8px 14px; border-radius: 10px; transition: all .2s;
+    }
+    .nav-link:hover { color: var(--pink); background: rgba(255,95,160,0.08); }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* HERO */
+    .hero { padding: 64px 0 44px; text-align: center; }
+    .badge-live {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 16px; border-radius: 999px;
+      background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.28);
+      color: var(--success); font-size: 13px; font-weight: 700; margin-bottom: 20px;
+    }
+    .badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero h1 {
+      font-size: clamp(30px, 5vw, 50px); font-weight: 900; line-height: 1.1; margin-bottom: 14px;
+      background: linear-gradient(90deg, var(--pink), var(--yellow), var(--peach));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero-sub { font-size: 17px; color: var(--muted); max-width: 600px; margin: 0 auto 36px; font-weight: 600; }
+
+    /* DOWNLOAD CARD */
+    .download-card {
+      background: white; border: 1.5px solid var(--line);
+      border-radius: 28px; padding: 36px;
+      max-width: 640px; margin: 0 auto;
+      box-shadow: 0 16px 56px rgba(255,95,160,0.14);
+    }
+    .dl-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: space-between; margin-bottom: 24px; }
+    .release-info { text-align: left; flex: 1; min-width: 200px; }
+    .release-version { font-size: 30px; font-weight: 900; color: var(--text); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .version-tag {
+      font-size: 12px; padding: 3px 10px; border-radius: 8px;
+      background: rgba(255,95,160,0.1); color: var(--pink); font-weight: 700;
+    }
+    .release-meta { color: var(--muted); font-size: 13px; margin-top: 6px; display: flex; gap: 14px; flex-wrap: wrap; font-weight: 600; }
+    .download-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+      padding: 17px 28px; border-radius: 16px; width: 100%;
+      background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+      color: #fff; font-weight: 900; font-size: 17px; border: none; cursor: pointer;
+      box-shadow: 0 10px 28px rgba(255,95,160,0.36);
+      transition: transform .15s, box-shadow .2s;
+    }
+    .download-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 38px rgba(255,95,160,0.44); }
+    .download-note { margin-top: 12px; font-size: 13px; color: var(--muted); text-align: center; font-weight: 600; }
+    .changelog-preview { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); text-align: left; }
+    .changelog-preview h4 {
+      font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px;
+      color: var(--pink); margin-bottom: 10px; font-weight: 800;
+    }
+    .changelog-text { color: var(--text); font-size: 14px; line-height: 1.75; white-space: pre-line; font-weight: 600; }
+
+    /* SECTION */
+    .section { padding: 64px 0; }
+    .section-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; text-align: center; color: var(--text); }
+    .section-sub { color: var(--muted); text-align: center; margin-bottom: 36px; max-width: 600px; margin-left: auto; margin-right: auto; font-weight: 600; }
+
+    /* REQ GRID */
+    .req-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .req-card {
+      background: white; border: 1.5px solid var(--line);
+      border-radius: 18px; padding: 24px; text-align: center;
+      box-shadow: 0 4px 16px rgba(255,95,160,0.07);
+    }
+    .req-icon { font-size: 32px; margin-bottom: 10px; }
+    .req-title { font-size: 13px; color: var(--muted); margin-bottom: 4px; font-weight: 700; }
+    .req-value { font-size: 18px; font-weight: 900; color: var(--text); }
+
+    /* INSTALL STEPS */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+    .step-card { background: white; border: 1.5px solid var(--line); border-radius: 18px; padding: 26px; box-shadow: 0 4px 16px rgba(255,95,160,0.07); }
+    .step-num {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--pink), var(--yellow));
+      color: #fff; font-weight: 900; font-size: 17px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px; box-shadow: 0 6px 18px rgba(255,95,160,0.28);
+    }
+    .step-title { font-size: 16px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+    .step-desc { font-size: 14px; color: var(--muted); font-weight: 600; }
+
+    /* HISTORY */
+    .history-list { display: flex; flex-direction: column; gap: 12px; }
+    .history-item { background: white; border: 1.5px solid var(--line); border-radius: 18px; padding: 22px 24px; box-shadow: 0 4px 16px rgba(255,95,160,0.07); }
+    .history-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+    .history-version { font-size: 18px; font-weight: 900; color: var(--text); }
+    .history-version .vcode { color: var(--muted); font-weight: 600; font-size: 14px; margin-left: 8px; }
+    .history-meta { color: var(--muted); font-size: 13px; font-weight: 600; }
+    .history-changelog { color: var(--text); font-size: 14px; line-height: 1.75; white-space: pre-line; margin-top: 8px; font-weight: 600; }
+    .history-link { color: var(--pink); font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; }
+    .history-link:hover { text-decoration: underline; }
+
+    /* TRUST */
+    .trust-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+    .trust-card {
+      background: white; border: 1.5px solid var(--line);
+      border-radius: 18px; padding: 22px;
+      display: flex; gap: 14px; align-items: flex-start;
+      box-shadow: 0 4px 16px rgba(255,95,160,0.07);
+    }
+    .trust-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255,95,160,0.1), rgba(255,209,102,0.12));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .trust-content h4 { font-size: 15px; font-weight: 800; margin-bottom: 4px; color: var(--text); }
+    .trust-content p { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 600; }
+
+    /* FAQ */
+    .faq-list { display: flex; flex-direction: column; gap: 10px; }
+    .faq-item { background: white; border: 1.5px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 14px rgba(255,95,160,0.06); }
+    .faq-q { padding: 18px 22px; cursor: pointer; font-weight: 700; font-size: 15px; display: flex; justify-content: space-between; align-items: center; user-select: none; color: var(--text); }
+    .faq-q::after { content: '+'; font-size: 22px; color: var(--pink); transition: transform .2s; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a { padding: 0 22px; max-height: 0; overflow: hidden; transition: max-height .25s, padding .25s; color: var(--muted); font-size: 14px; line-height: 1.7; font-weight: 600; }
+    .faq-item.open .faq-a { padding: 0 22px 18px; max-height: 400px; }
+
+    /* STATE */
+    .state-card { text-align: center; padding: 30px; color: var(--muted); }
+    .spinner { width: 32px; height: 32px; margin: 0 auto 12px; border: 3px solid rgba(255,95,160,0.15); border-top-color: var(--pink); border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .hidden { display: none !important; }
+
+    /* FOOTER */
+    .footer { max-width: 1080px; margin: 0 auto; padding: 40px 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; text-align: center; font-weight: 600; }
+    .footer a { color: var(--pink); margin: 0 8px; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .download-card { padding: 24px; }
+      .release-version { font-size: 24px; }
+      .download-btn { font-size: 15px; padding: 14px 22px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="/" class="brand">
+        <div class="logo-icon">🎤</div>
+        <span><span class="brand-kyu">Kyu</span><span class="brand-live">Live</span></span>
+      </a>
+      <nav style="display:flex;gap:4px;">
+        <a href="/" class="nav-link">Beranda</a>
+        <a href="#install" class="nav-link">Cara Install</a>
+        <a href="#history" class="nav-link">Changelog</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container hero">
+      <span class="badge-live"><span class="badge-dot"></span> Versi Stabil Tersedia</span>
+      <h1>Download KyuLive untuk Android</h1>
+      <p class="hero-sub">
+        Install langsung dari developer resmi. File APK terverifikasi, tanpa iklan pihak ketiga,
+        dan selalu sinkron dengan server <strong>chatmeapp.my.id</strong>.
+      </p>
+
+      <div class="download-card" id="dl-card">
+        <div class="state-card" id="dl-loading">
+          <div class="spinner"></div>
+          <p>Memuat versi terbaru...</p>
+        </div>
+        <div class="state-card hidden" id="dl-error">
+          <p style="color:var(--warning);margin-bottom:8px;">⚠️ Gagal memuat info versi.</p>
+          <p style="font-size:13px;">Silakan coba refresh halaman atau hubungi support.</p>
+        </div>
+        <div class="hidden" id="dl-content">
+          <div class="dl-row">
+            <div class="release-info">
+              <div class="release-version">
+                <span id="dl-version">—</span>
+                <span class="version-tag" id="dl-vcode">build —</span>
+              </div>
+              <div class="release-meta">
+                <span>📦 <span id="dl-size">—</span></span>
+                <span>📱 Android <span id="dl-min">—</span>+</span>
+                <span>📅 <span id="dl-date">—</span></span>
+              </div>
+            </div>
+          </div>
+          <a href="#" class="download-btn" id="dl-btn" onclick="return startDownload(event)">
+            <span>⬇</span>
+            <span>Download APK Sekarang</span>
+          </a>
+          <p class="download-note">
+            <span id="dl-count">0</span> kali diunduh • File langsung dari server resmi KyuLive
+          </p>
+          <div class="changelog-preview" id="dl-changelog-wrap">
+            <h4>📝 Apa yang Baru</h4>
+            <div class="changelog-text" id="dl-changelog">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section">
+      <h2 class="section-title">Sistem yang Dibutuhkan</h2>
+      <p class="section-sub">Aplikasi ringan dan kompatibel dengan mayoritas HP Android modern.</p>
+      <div class="req-grid">
+        <div class="req-card"><div class="req-icon">📱</div><div class="req-title">Sistem Operasi</div><div class="req-value">Android <span id="req-android">7</span>+</div></div>
+        <div class="req-card"><div class="req-icon">💾</div><div class="req-title">Storage Bebas</div><div class="req-value">~150 MB</div></div>
+        <div class="req-card"><div class="req-icon">🧠</div><div class="req-title">RAM Minimum</div><div class="req-value">2 GB</div></div>
+        <div class="req-card"><div class="req-icon">🌐</div><div class="req-title">Koneksi</div><div class="req-value">3G / 4G / WiFi</div></div>
+      </div>
+    </section>
+
+    <section class="container section" id="install">
+      <h2 class="section-title">Cara Install APK</h2>
+      <p class="section-sub">4 langkah mudah, kurang dari 1 menit.</p>
+      <div class="steps">
+        <div class="step-card"><div class="step-num">1</div><h3 class="step-title">Download APK</h3><p class="step-desc">Tekan tombol <strong>Download APK</strong> di atas. File akan tersimpan ke folder Download HP kamu.</p></div>
+        <div class="step-card"><div class="step-num">2</div><h3 class="step-title">Izinkan Sumber Tidak Dikenal</h3><p class="step-desc">Buka <strong>Pengaturan → Keamanan → Izin Khusus</strong>, aktifkan <em>"Install dari sumber tidak dikenal"</em> untuk browser kamu.</p></div>
+        <div class="step-card"><div class="step-num">3</div><h3 class="step-title">Buka File APK</h3><p class="step-desc">Tap file APK di folder Download, pilih <strong>Install</strong> dan tunggu beberapa detik.</p></div>
+        <div class="step-card"><div class="step-num">4</div><h3 class="step-title">Mulai Party! 🎉</h3><p class="step-desc">Buka aplikasi <strong>KyuLive</strong>, daftar akun atau login, dan langsung join party room. Selamat datang!</p></div>
+      </div>
+    </section>
+
+    <section class="container section">
+      <h2 class="section-title">Kenapa Aman?</h2>
+      <p class="section-sub">Kami serius soal keamanan dan privasi pengguna.</p>
+      <div class="trust-row">
+        <div class="trust-card"><div class="trust-icon">🔒</div><div class="trust-content"><h4>Sumber Resmi Developer</h4><p>APK didistribusikan langsung dari server <code>chatmeapp.my.id</code>, bukan mirror atau pihak ketiga.</p></div></div>
+        <div class="trust-card"><div class="trust-icon">🛡️</div><div class="trust-content"><h4>Tanpa Iklan & Tracker</h4><p>Tidak ada SDK iklan, tracker analitik personal, atau cookie pihak ketiga. Data kamu tetap milik kamu.</p></div></div>
+        <div class="trust-card"><div class="trust-icon">🔐</div><div class="trust-content"><h4>HTTPS End-to-End</h4><p>Semua koneksi ke server menggunakan TLS. Password tersimpan dengan hash bcrypt.</p></div></div>
+        <div class="trust-card"><div class="trust-icon">📜</div><div class="trust-content"><h4>Compliance UU PDP Indonesia</h4><p>Hak akses, koreksi, dan penghapusan data pribadi bisa diajukan kapan saja via support.</p></div></div>
+      </div>
+    </section>
+
+    <section class="container section" id="history">
+      <h2 class="section-title">Riwayat Versi</h2>
+      <p class="section-sub">Semua rilis sebelumnya beserta changelog-nya.</p>
+      <div class="history-list" id="history-list">
+        <div class="state-card"><div class="spinner"></div><p>Memuat riwayat versi...</p></div>
+      </div>
+    </section>
+
+    <section class="container section">
+      <h2 class="section-title">Pertanyaan Umum</h2>
+      <p class="section-sub">Jawaban untuk pertanyaan yang sering ditanyakan.</p>
+      <div class="faq-list">
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Apakah aman install APK dari luar Play Store?</div><div class="faq-a">Aman, selama kamu mengunduh dari sumber resmi yaitu <strong>web.chatmeapp.my.id</strong>. APK kami dibuild langsung oleh developer dan diserve via HTTPS. Hindari mengunduh APK KyuLive dari situs lain karena bisa dimodifikasi.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Kenapa belum ada di Play Store?</div><div class="faq-a">Kami sedang dalam proses review Play Store. Sementara itu, distribusi via APK langsung lebih cepat untuk update dan tidak terbatasi kebijakan store.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Bagaimana cara update ke versi baru?</div><div class="faq-a">Saat ada versi baru, aplikasi akan menampilkan notifikasi untuk download update. Atau kamu bisa kembali ke halaman ini dan download versi terbaru — install di atas versi lama tanpa perlu uninstall (data tidak hilang).</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Bisa install di iOS / iPhone?</div><div class="faq-a">Belum. Saat ini KyuLive hanya tersedia untuk Android. Versi iOS sedang dalam roadmap pengembangan.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Ada masalah saat install. Harus hubungi siapa?</div><div class="faq-a">Email ke <a href="mailto:support@chatmeapp.my.id" style="color:var(--pink);">support@chatmeapp.my.id</a> dengan info: model HP, versi Android, dan screenshot error. Tim akan respon dalam 1×24 jam.</div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 KyuLive. Semua hak dilindungi.</p>
+    <p style="margin-top:10px;">
+      <a href="/">Beranda</a>
+      <a href="/terms">Syarat</a>
+      <a href="/privacy">Privasi</a>
+      <a href="mailto:support@chatmeapp.my.id">Support</a>
+    </p>
+  </footer>
+
+  <script>
+    const API_BASE = 'https://api.chatmeapp.my.id/api/public';
+
+    function fmtBytes(b) {
+      if (!b) return '—';
+      const mb = b / (1024 * 1024);
+      return mb < 1024 ? mb.toFixed(1) + ' MB' : (mb/1024).toFixed(2) + ' GB';
+    }
+    function fmtDate(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+    }
+    function fmtNum(n) {
+      if (!n) return '0';
+      return Number(n).toLocaleString('id-ID');
+    }
+    function escHtml(s) {
+      if (!s) return '';
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function toggleFaq(el) {
+      el.closest('.faq-item').classList.toggle('open');
+    }
+
+    let latestRelease = null;
+
+    async function loadLatest() {
+      try {
+        const res = await fetch(API_BASE + '/releases');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const r = data.release;
+        if (!r) throw new Error('No active release');
+        latestRelease = r;
+        document.getElementById('dl-version').textContent = 'v' + r.version_name;
+        document.getElementById('dl-vcode').textContent = 'build ' + r.version_code;
+        document.getElementById('dl-size').textContent = fmtBytes(r.file_size);
+        document.getElementById('dl-min').textContent = r.min_android || 7;
+        document.getElementById('dl-date').textContent = fmtDate(r.created_at);
+        document.getElementById('dl-count').textContent = fmtNum(r.download_count);
+        document.getElementById('dl-changelog').textContent = r.changelog || 'Tidak ada catatan untuk versi ini.';
+        document.getElementById('req-android').textContent = r.min_android || 7;
+        document.getElementById('dl-btn').href = r.download_url;
+        document.getElementById('dl-loading').classList.add('hidden');
+        document.getElementById('dl-content').classList.remove('hidden');
+      } catch (err) {
+        document.getElementById('dl-loading').classList.add('hidden');
+        document.getElementById('dl-error').classList.remove('hidden');
+      }
+    }
+
+    async function loadHistory() {
+      try {
+        const res = await fetch(API_BASE + '/releases/all');
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const releases = data.releases ?? [];
+        const list = document.getElementById('history-list');
+        if (releases.length === 0) { list.innerHTML = '<div class="state-card"><p>Belum ada riwayat versi.</p></div>'; return; }
+        list.innerHTML = releases.map(r => `
+          <div class="history-item">
+            <div class="history-head">
+              <div class="history-version">v${escHtml(r.version_name)}<span class="vcode">build ${escHtml(String(r.version_code))}</span></div>
+              <div class="history-meta">📅 ${fmtDate(r.created_at)} &nbsp;•&nbsp; 📦 ${fmtBytes(r.file_size)} &nbsp;•&nbsp; ⬇ ${fmtNum(r.download_count)}x</div>
+            </div>
+            ${r.changelog ? `<div class="history-changelog">${escHtml(r.changelog)}</div>` : ''}
+            ${r.download_url ? `<a href="${escHtml(r.download_url)}" class="history-link" download>⬇ Download versi ini →</a>` : ''}
+          </div>
+        `).join('');
+      } catch {
+        document.getElementById('history-list').innerHTML = '<div class="state-card"><p>Gagal memuat riwayat versi.</p></div>';
+      }
+    }
+
+    async function startDownload(e) {
+      e.preventDefault();
+      if (!latestRelease) return false;
+      try {
+        await fetch(`${API_BASE}/releases/${latestRelease.id}/download`, { method: 'POST' });
+      } catch {}
+      window.location.href = latestRelease.download_url;
+      return false;
+    }
+
+    loadLatest();
+    loadHistory();
+  </script>
+</body>
+</html>
