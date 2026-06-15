@@ -1,0 +1,7 @@
+{
+  "name": "shell-quote",
+  "version": "1.8.2",
+  "description": "quote and parse shell commands",
+  "main": "index.js",
+  "license": "MIT"
+}

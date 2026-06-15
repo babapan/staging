@@ -1,0 +1,2 @@
+- [Party Room Join Banner Bug](party-join-banner.md) — party fast-path in gateway.ts was missing join MESSAGE broadcast
+- [Solo Live LiveKit Video](solo-livekit-video.md) — separate soloLiveKitService.ts avoids state conflict with partyService; both use require() lazy-load pattern

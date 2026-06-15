@@ -1,0 +1,54 @@
+{
+  "_comment": "Konfigurasi Lucky Get combo reward — edit file ini untuk ubah reward/rate tanpa sentuh kode.",
+
+  "price10": {
+    "_comment": "Gift harga 10 coin — milestone 100× → 200× berulang (fase 0 → fase 1 → fase 0 ...)",
+    "phase0": {
+      "label":             100,
+      "rewardMultiplier":  3,
+      "thresholdMin":      90,
+      "thresholdMax":      115
+    },
+    "phase1": {
+      "label":             200,
+      "rewardMultiplier":  5,
+      "thresholdMin":      90,
+      "thresholdMax":      115
+    }
+  },
+
+  "price100": {
+    "_comment": "Gift harga 100 coin — milestone 500× per siklus acak. Hanya aktif jika room sudah > roomThreshold coin.",
+    "label":              500,
+    "rewardMultiplier":   10,
+    "roomThreshold":      8000000,
+    "firstTriggerMin":    480,
+    "firstTriggerMax":    620,
+    "cycleMin":           480,
+    "cycleMax":           720,
+    "dropsByCombo": {
+      "_comment": "Berapa kali reward turun per trigger, berdasarkan combo (qty)",
+      "1":  6,
+      "3":  5,
+      "9":  4,
+      "19": 4,
+      "99": 1
+    }
+  },
+
+  "otherPrices": {
+    "_comment": "Gift harga selain 10 dan 100 — rate acak per tap",
+    "label":             0,
+    "rewardMultiplier":  4,
+    "firstTriggerMin":   90,
+    "firstTriggerMax":   130,
+    "ratesByCombo": {
+      "_comment": "Probabilitas drop per tap, berdasarkan combo (qty)",
+      "1":  0.08,
+      "3":  0.06,
+      "9":  0.04,
+      "19": 0.015,
+      "99": 0.008
+    }
+  }
+}

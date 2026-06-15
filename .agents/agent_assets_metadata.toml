@@ -1,0 +1,121 @@
+uploads = []
+
+[[generated]]
+id = "dzgoMnJsUZxgKq793dTrd"
+uri = "file://Server/server/public/slots/symbol_seven.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "AvwUgsmRWwKxtfTqobNMp"
+uri = "file://Server/server/public/slots/symbol_cherry.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "q_zsHdqf_MYc7Kqpy5UDy"
+uri = "file://Server/server/public/slots/symbol_bell.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "QKed6142Ibevw9Xqd1kGK"
+uri = "file://Server/server/public/slots/symbol_bar.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "KW_VGPvlcedLjnvy52dK5"
+uri = "file://Server/server/public/slots/symbol_diamond.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "2nxY0Su6cXcl4_IEn4-0i"
+uri = "file://Server/server/public/slots/symbol_star.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "l7WFWHZ7NLsS0fCYRU1nY"
+uri = "file://Server/server/public/slots/symbol_lemon.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "_s0TwJflWOEGIotD-SC6X"
+uri = "file://Server/server/public/grady/thumbnails/thumb_slot.png"
+type = "image"
+title = "slot machine thumbnail"
+
+[[generated]]
+id = "nGeJcxwyja-8YAsPH5DB8"
+uri = "file://Server/server/public/grady/thumbnails/thumb_dragon.png"
+type = "image"
+title = "dragon tiger card game thumbnail"
+
+[[generated]]
+id = "26LW6SxSGkfSFnzIrxkdx"
+uri = "file://Server/server/public/grady/thumbnails/thumb_grady.png"
+type = "image"
+title = "ferris wheel grady thumbnail"
+
+[[generated]]
+id = "xcr9TRJKxmRza6g8G2YCh"
+uri = "file://Server/server/public/grady/dragon/dragon-art.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "VNfcdPqaaFYQr1PuMirbn"
+uri = "file://Server/server/public/grady/dragon/tiger-art.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "sPIP79DnJRtukLU8UjB34"
+uri = "file://Server/server/public/grady/lavaslot/bg-load.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "KD2Yc85isnNzU8joSDqG_"
+uri = "file://Server/server/public/grady/thumbnails/thumb_lavaslot.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "AZlKTZGXaMthHbw_oELYz"
+uri = "file://Migme/assets/images/lucky_bag_icon.png"
+type = "image"
+title = "lucky bag hongbao icon"
+
+[[generated]]
+id = "ZOChEbSFevVkxq0g9WeMY"
+uri = "file://attached_assets/generated_images/teen_patti_card_game_11c9.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "TjzzDtB2EA3welg0NwsMo"
+uri = "file://attached_assets/generated_images/teen_patti_card_game_3920.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "ygXTY5AVwWKyTZFcj3Mna"
+uri = "file://attached_assets/generated_images/teen_patti_loading_screen_a5d2.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "7x0rCg8N46yzZi5ue4K-l"
+uri = "file://attached_assets/generated_images/set_of_casino_poker_fd9b.png"
+type = "image"
+title = "generated_image"
+
+[[outputs]]
+id = "D_RsE1fQzUaLYQK2IJwbY"
+uri = "file://Server/config/luckyGiftRewards.json"
+type = "unspecified"
+title = "Lucky Gift Rewards Config"

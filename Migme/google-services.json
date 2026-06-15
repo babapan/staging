@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "229886772393",
+    "project_id": "max99live",
+    "storage_bucket": ""
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229886772393:android:placeholder",
+        "android_client_info": {
+          "package_name": "com.max99stag.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "229886772393-uno4m9brudkf8ef4j6rcob6pj1qiu73h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.max99stag.app",
+            "certificate_hash": "a87d1bdb6043d4feb0d7caab2d059a3bc08e43fd"
+          }
+        },
+        {
+          "client_id": "229886772393-0kdkjksq3q332i4u7egj7vvmqv8179ir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": ""
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "229886772393-0kdkjksq3q332i4u7egj7vvmqv8179ir.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

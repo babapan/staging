@@ -1,0 +1,110 @@
+modules = ["nodejs-20", "web", "nix", "python-3.11", "postgresql-16"]
+[agent]
+expertMode = true
+stack = "BEST_EFFORT_FALLBACK"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start Frontend"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start Backend"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start Admin Panel"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start Web"
+
+[[workflows.workflow]]
+name = "Start Frontend"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd Migme && npm install --no-audit --prefer-offline 2>&1 | tail -3 && node_modules/.bin/expo start --tunnel --dev-client"
+
+[[workflows.workflow]]
+name = "Start Backend"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "redis-server --daemonize yes --port 6379 --bind 127.0.0.1 --logfile /tmp/redis.log 2>/dev/null; sleep 1; cd Server && REDIS_URL=redis://127.0.0.1:6379 npm run dev"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Start Admin Panel"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd admin && DATABASE_URL=$DATABASE_URL npm run dev"
+waitForPort = 8080
+
+[[workflows.workflow]]
+name = "Start Web"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd Web && WEB_PORT=3002 node server.js"
+waitForPort = 3002
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[nix]
+channel = "stable-25_05"
+packages = ["eas-cli"]
+
+[userenv]
+
+[userenv.shared]
+EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID = "229886772393-uno4m9brudkf8ef4j6rcob6pj1qiu73h.apps.googleusercontent.com"
+EXPO_PUBLIC_EXPO_USERNAME = "mig33"
+EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID = "229886772393-0kdkjksq3q332i4u7egj7vvmqv8179ir.apps.googleusercontent.com"
+
+[[ports]]
+localPort = 3002
+externalPort = 80
+
+[[ports]]
+localPort = 5000
+externalPort = 5000
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
+[[ports]]
+localPort = 8081
+externalPort = 8081
+
+[[ports]]
+localPort = 8082
+externalPort = 3001
+
+[[ports]]
+localPort = 9119
+externalPort = 3000
